@@ -1,5 +1,4 @@
 { config, pkgs, ... }:
-
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -27,9 +26,9 @@
     };
   };
 
-  xdg.configFile = {
-    "tmux/tmux.conf".text = pkgs.lib.readFile ./tmux.conf;
-    "sway/config".text = pkgs.lib.readFile ./sway.conf;
+  xdg.configFile = with pkgs; {
+    "tmux/tmux.conf".text = lib.readFile ./tmux.conf;
+    "sway/config".text = lib.readFile ./sway.conf;
   };
 
   # This value determines the Home Manager release that your
