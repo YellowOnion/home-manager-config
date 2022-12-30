@@ -1,4 +1,12 @@
 { config, pkgs, ... }:
+
+let bgLockImg = pkgs.runCommand "bg_locked.png" {} ''
+    export HOME=./
+    mkdir tmp
+    export TMP=./tmp
+    ${pkgs.gmic}/bin/gmic ${./bg.png} blur 5 rgb2hsv split c "${./bg_noise.png}" mul[-2,-1] sub[-2] 10% add[-1] 10% append[-3--1] c hsv2rgb output[-1] "$out"
+'';
+in
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -57,6 +65,19 @@
   xdg.configFile = with pkgs; {
     "tmux/tmux.conf".text = lib.readFile ./tmux.conf;
     "sway/config".text = lib.readFile ./sway.conf;
+
+    "sway/config.d/bg_image" = {
+      text = ''
+          output * bg ${./bg.png} fill
+          '';
+    };
+
+    "swaylock/config".text =
+      ''
+        daemonize
+        color=333333
+        image=${./bg_lock.png}
+      '';
   };
 
   # This value determines the Home Manager release that your

@@ -6,9 +6,10 @@
   xdg.configFile."sway/config.d/this"
     .text =
     ''
-      exec swayidle -w \
-          timeout 600 'swaylock -f -c 000000 && swaymsg "output * dpms off"' \
-          resume swaymsg "output * dpms on" \
+      exec swayidle -w                              \
+          timeout 610 'swaylock -f -c 000000'       \
+          timeout 600 'swaymsg "output * dpms off"' \
+          resume 'swaymsg "output * dpms on"'       \
           before-sleep 'swaylock -f -c 000000'
 
       set $dell "Dell Inc. DELL P2314H D59H247SAGRL"
@@ -34,10 +35,6 @@
           pos 1080 0
           mode 2560x1440@180hz
       }
-
-    input 1386:888:Wacom_Intuos_BT_M_Pen {
-          map_to_output DP-2
-    }
     '';
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage

@@ -54,16 +54,16 @@ in
 
       output $dell {
           transform 270
-          pos 0 0
+          pos 2560 0
       }
 
       output $lg {
-          pos 1080 0
+          pos 0 0
           mode 2560x1440@180hz
       }
 
     input 1386:888:Wacom_Intuos_BT_M_Pen {
-          map_to_output DP-2
+          map_to_output $lg
     }
     '';
 
