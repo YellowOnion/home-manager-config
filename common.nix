@@ -33,10 +33,20 @@ in
       ''
         xdotool key control+backslash
       '')
-    (writeShellScriptBin "runGame"
+    (writeShellScriptBin "runVKGame"
       ''
-      PULSE_SINK=game DXVK_HUD=fps obs-gamecapture "$@"
+      PIPEWIRE_NODE=game PULSE_SINK=game OBS_VKCAPTURE=1 MANGOHUD=1 "$@"
       '')
+    (writeShellScriptBin "runOGLGame"
+      ''
+      PIPEWIRE_NODE=game PULSE_SINK=game obs-gamecapture mangohud "$@"
+      '')
+    #(writeShellScriptBin "runWithMouseLock"
+    #  ''
+    #    swaymsg 'input "Glorious Model O" map_to_output $primary_monitor'
+    #    $@"
+    #    swaymsg 'input "Glorious Model O" map_to_output *'
+    #  '')
   ];
 
   programs.git = {

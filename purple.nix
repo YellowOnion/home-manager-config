@@ -9,9 +9,9 @@ let
   swayResume = (pkgs.writeShellScriptBin
   "swayResume"
       ''
-        swaymsg "output * dpms on"
+        swaymsg 'output * dpms on'
         sleep 1
-        swaymsg "output DP-2 mode 2560x1440@180hz"
+        swaymsg 'output $lg mode 2560x1440@180hz'
         ${setDefaultMonitor}/bin/setDefaultMonitor
       '');
   proton-ge = pkgs.fetchzip (import ./proton.nix);
@@ -34,12 +34,13 @@ in
       exec ${setDefaultMonitor}/bin/setDefaultMonitor
 
       exec swayidle -w \
-          timeout 600 'swaylock -f -c 000000 && swaymsg "output * dpms off"' \
+          timeout 605 'swaylock -f -c 000000' \
+          timeout 600 'swaymsg "output * dpms off"' \
           resume ${swayResume}/bin/swayResume \
           before-sleep 'swaylock -f -c 000000'
 
       set $dell "Dell Inc. DELL P2314H D59H247SAGRL"
-      set $lg   "Goldstar Company Ltd LG ULTRAGEAR 203NTDV9B106"
+      set $lg   "LG Electronics LG ULTRAGEAR 203NTDV9B106"
 
       workspace 6 output $dell
       workspace 7 output $dell
