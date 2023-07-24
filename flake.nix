@@ -12,14 +12,23 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    openttd = {
+      url = "github:YellowOnion/nix-openttd-jgrpp";
+      flake = false;
+    };
   };
 
-  outputs = { nixpkgs, emacs-overlay, nix-doom-emacs, home-manager, ... }:
+  outputs = { nixpkgs, emacs-overlay, nix-doom-emacs, home-manager, openttd, ... }:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; overlays = [ (import emacs-overlay) ]; };
+      pkgs = import nixpkgs { inherit system;
+                              config.allowUnfree = true;
+                              overlays = [ (import emacs-overlay) ];
+                            };
       mkHomeConf = file: home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
+        extraSpecialArgs = {openttd = import openttd {pkgs = pkgs;};};
+
         modules = [ nix-doom-emacs.hmModule file ];
       };
 

@@ -4,7 +4,7 @@ let
   setDefaultMonitor = (pkgs.writeShellScriptBin
     "setDefaultMonitor"
     ''
-      xrandr --output $( xrandr --listmonitors | grep "2560.*1440" | awk "{ print \$4 ; }" ) --primary
+      ${pkgs.xorg.xrandr}/bin/xrandr --output $( ${pkgs.xorg.xrandr}/bin/xrandr --listmonitors | grep "2560.*1440" | awk "{ print \$4 ; }" ) --primary
     '');
   swayResume = (pkgs.writeShellScriptBin
   "swayResume"
@@ -22,11 +22,14 @@ in
   home.packages = with pkgs; [
     swayResume
     setDefaultMonitor
+    (pkgs.writeShellScriptBin "extraGameScripts.sh"
+      ''
+      ${setDefaultMonitor}/bin/setDefaultMonitor
+      ''
+    )
   ];
 
-  home.sessionVariables = {
-    STEAM_EXTRA_COMPAT_TOOLS_PATHS = proton-ge;
-  };
+  xdg.dataFile."Steam/compatibilitytools.d/${proton-ge.name}".source = proton-ge;
 
   xdg.configFile."sway/config.d/this"
     .text =

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, openttd, ... }:
 
 let bgLockImg = pkgs.runCommand "bg_locked.png" {} ''
     export HOME=./
@@ -13,41 +13,61 @@ in
   programs.doom-emacs = {
     enable = true;
     doomPrivateDir = ./doom.d;
-    emacsPackage   = pkgs.emacsPgtkNativeComp;
+    # emacsPackage   = pkgs.emacsPgtk;
   };
 
-  #nixpkgs.overlays = [
-  #  (import (builtins.fetchTarball {
-  #    url = https://github.com/nix-community/emacs-overlay/archive/7627a31cb49b9dfafe0ecf21ac2734374730d06a.tar.gz;
-  #  }))
-  #];
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "daniel";
   home.homeDirectory = "/home/daniel";
-  home.packages = with pkgs; [
-    rustc
-    cargo
-    rnix-lsp
-    (writeShellScriptBin "discordToggleMute"
-      ''
-        xdotool key control+backslash
-      '')
-    (writeShellScriptBin "runVKGame"
-      ''
-      PIPEWIRE_NODE=game PULSE_SINK=game OBS_VKCAPTURE=1 MANGOHUD=1 "$@"
-      '')
-    (writeShellScriptBin "runOGLGame"
-      ''
-      PIPEWIRE_NODE=game PULSE_SINK=game obs-gamecapture mangohud "$@"
-      '')
-    #(writeShellScriptBin "runWithMouseLock"
-    #  ''
-    #    swaymsg 'input "Glorious Model O" map_to_output $primary_monitor'
-    #    $@"
-    #    swaymsg 'input "Glorious Model O" map_to_output *'
-    #  '')
-  ];
+  home.packages = with pkgs;
+    let extraGameScripts = "${config.home.profileDirectory}/bin/extraGameScripts.sh";
+        yad = "${pkgs.yad}/bin/yad";
+    in
+    [
+      steamcmd
+      rustc
+      cargo
+      rnix-lsp
+      ffmpeg_5-full
+      (writeShellScriptBin "discordToggleMute"
+        ''
+          xdotool key control+backslash
+        '')
+      (writeShellScriptBin "runVKGame"
+        ''
+        test -f ${extraGameScripts} && ${extraGameScripts}
+
+        PIPEWIRE_NODE=game PULSE_SINK=game OBS_VKCAPTURE=1 MANGOHUD=1 systemd-inhibit "$@"
+        '')
+      (writeShellScriptBin "runOGLGame"
+        ''
+        test -f ${extraGameScripts} && ${extraGameScripts}
+        PIPEWIRE_NODE=game PULSE_SINK=game systemd-inhibit obs-gamecapture mangohud "$@"
+        '')
+      #(writeShellScriptBin "runWithMouseLock"
+      #  ''
+      #    swaymsg 'input "Glorious Model O" map_to_output $primary_monitor'
+      #    $@"
+      #    swaymsg 'input "Glorious Model O" map_to_output *'
+      #  '')
+
+      (writeShellScriptBin "openttd-launcher"
+        ''
+        run_openttd () {
+            cd $1
+            ./bin/openttd
+        }
+        ${yad} --image ${openttd.vanilla}/share/icons/hicolor/128x128/apps/openttd.png \
+               --text "Which Version of OpenTTD?" \
+               --fixed \
+               --buttons-layout=center \
+               --button "Vanilla:0" \
+               --button "JGR patch-pack:1" \
+        && run_openttd ${openttd.vanilla} \
+        || run_openttd ${openttd.jgr}
+        '')
+    ];
 
   programs.git = {
     enable = true;
@@ -75,12 +95,15 @@ in
   xdg.configFile = with pkgs; {
     "tmux/tmux.conf".text = lib.readFile ./tmux.conf;
     "sway/config".text = lib.readFile ./sway.conf;
+    "sway/config.d/home-manager"
+      .text = ''
+            exec_always $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+      '';
 
-    "sway/config.d/bg_image" = {
-      text = ''
-          output * bg ${./bg.png} fill
+    "sway/config.d/bg_image"
+      .text = ''
+            output * bg ${./bg.png} fill
           '';
-    };
 
     "swaylock/config".text =
       ''
