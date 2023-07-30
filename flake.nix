@@ -14,7 +14,7 @@
     };
     openttd = {
       url = "github:YellowOnion/nix-openttd-jgrpp";
-      flake = false;
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
