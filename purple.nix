@@ -22,13 +22,16 @@ in
   home.packages = with pkgs; [
     swayResume
     setDefaultMonitor
-    (pkgs.writeShellScriptBin "extraGameScripts.sh"
+  ];
+
+  games.extraGameScripts = [
+    (pkgs.writeShellScriptBin "run.sh"
       ''
       ${setDefaultMonitor}/bin/setDefaultMonitor
+      exec "$@"
       ''
     )
   ];
-
   xdg.dataFile."Steam/compatibilitytools.d/${proton-ge.name}".source = proton-ge;
 
   xdg.configFile."sway/config.d/this"

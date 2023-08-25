@@ -8,44 +8,65 @@ let bgLockImg = pkgs.runCommand "bg_locked.png" {} ''
 '';
 in
 {
+  manual.manpages.enable = false;
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
   programs.doom-emacs = {
     enable = true;
     doomPrivateDir = ./doom.d;
+    extraPackages = [pkgs.nil];
     # emacsPackage   = pkgs.emacsPgtk;
   };
-
+  imports = [
+    ./games.nix
+  ];
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "daniel";
   home.homeDirectory = "/home/daniel";
+  i18n.inputMethod = {
+    enabled = "fcitx5";
+    fcitx5.addons = [ pkgs.fcitx5-mozc ];
+  };
   home.packages = with pkgs;
-    let extraGameScripts = "${config.home.profileDirectory}/bin/extraGameScripts.sh";
-        yad = "${pkgs.yad}/bin/yad";
+    let
+      extraGameScripts = "${config.home.profileDirectory}/bin/extraGameScripts.sh";
+      wlrobs = obs-studio-plugins.wlrobs.overrideAttrs (a: {
+        src = pkgs.fetchhg {
+          url =  "https://hg.sr.ht/~scoopta/wlrobs";
+          rev =  "f72d5cb3cbbd";
+          sha256 = "1nf8pg45swjwacvdaraa6l7c24i95pqds3rbradllj8jgxvk88w6";
+        };
+        });
     in
     [
+      nil
       steamcmd
       rustc
       cargo
       cachix
-      rnix-lsp
       ffmpeg_5-full
+      imv
+      unzip
+      p7zip
+      (wrapOBS {
+        plugins = [ obs-studio-plugins.obs-vkcapture wlrobs ];
+      })
       (writeShellScriptBin "discordToggleMute"
         ''
           xdotool key control+backslash
         '')
-      (writeShellScriptBin "runVKGame"
+      (writeShellScriptBin "grimshot-area-better"
         ''
-        test -f ${extraGameScripts} && ${extraGameScripts}
-
-        PIPEWIRE_NODE=game PULSE_SINK=game OBS_VKCAPTURE=1 MANGOHUD=1 systemd-inhibit "$@"
-        '')
-      (writeShellScriptBin "runOGLGame"
+        OUTPUT=$(swaymsg -t get_outputs | jq -r '.[] | select(.focused).name')
+        FOCUS=$(swaymsg -t get_tree | jq -r 'recurse(.nodes[]?, .floating_nodes[]?) | select(.focused).id')
+        grim -t ppm -o $OUTPUT | imv -w screen-shot - &
+        IMV_PID=$!
+        grimshot --notify copy area
+        imv-msg $IMV_PID=$! quit
+        swaymsg "[con_id = $FOCUS] focus"
         ''
-        test -f ${extraGameScripts} && ${extraGameScripts}
-        PIPEWIRE_NODE=game PULSE_SINK=game systemd-inhibit obs-gamecapture mangohud "$@"
-        '')
+      )
       #(writeShellScriptBin "runWithMouseLock"
       #  ''
       #    swaymsg 'input "Glorious Model O" map_to_output $primary_monitor'
@@ -54,6 +75,13 @@ in
       #  '')
       openttd.launcher
     ];
+
+  home.pointerCursor = {
+    x11.enable = true;
+    gtk.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Original-Classic";
+  };
 
   programs.git = {
     enable = true;
@@ -84,6 +112,7 @@ in
     "sway/config.d/home-manager"
       .text = ''
             exec_always $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+            seat seat0 xcursor_theme ${config.home.pointerCursor.name}
       '';
 
     "sway/config.d/bg_image"
