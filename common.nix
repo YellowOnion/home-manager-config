@@ -11,11 +11,15 @@ in
   manual.manpages.enable = false;
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
   programs.doom-emacs = {
     enable = true;
     doomPrivateDir = ./doom.d;
     extraPackages = [pkgs.nil];
-    # emacsPackage   = pkgs.emacsPgtk;
+    emacsPackage   = pkgs.emacs29-pgtk;
   };
   imports = [
     ./games.nix
@@ -40,6 +44,8 @@ in
         });
     in
     [
+      element-desktop
+      hexchat
       nil
       steamcmd
       rustc
