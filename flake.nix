@@ -2,14 +2,19 @@
   description = "Home Manager configuration of daniel";
 
   inputs = {
-    # Specify the source of Home Manager and Nixpkgs.
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
-    #doom-emacs.url = "github:doomemacs/doomemacs/9d4d5b756a8598c4b5c842e9f1f33148af2af8fd";
+    # keep synced with NixOS commit
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
-    nix-doom-emacs.url = "github:nix-community/nix-doom-emacs";
-    #nix-doom-emacs.inputs.doom-emacs.follows = "doom-emacs";
+     nix-straight = {
+      url = "github:codingkoi/nix-straight.el?ref=codingkoi/apply-librephoenixs-fix";
+      flake = false;
+    };
+    nix-doom-emacs = {
+       url = "github:nix-community/nix-doom-emacs";
+       inputs.nix-straight.follows = "nix-straight";
+    };
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     openttd = {
