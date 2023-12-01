@@ -3,7 +3,7 @@
 
   inputs = {
     # keep synced with NixOS commit
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
      nix-straight = {
       url = "github:codingkoi/nix-straight.el?ref=codingkoi/apply-librephoenixs-fix";
@@ -12,6 +12,7 @@
     nix-doom-emacs = {
        url = "github:nix-community/nix-doom-emacs";
        inputs.nix-straight.follows = "nix-straight";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
       url = "github:nix-community/home-manager/release-23.05";
