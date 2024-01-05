@@ -2,6 +2,7 @@
 
 let
   cfg = config.games;
+  vk-capture = pkgs.obs-studio-plugins.obs-vkcapture;
 
   withExtraGameScripts = scripts:
     (pkgs.writeShellScriptBin "run.sh"
@@ -19,7 +20,7 @@ let
 
   runOGLGame = (pkgs.writeShellScriptBin "runOGLGame"
     ''
-      PIPEWIRE_NODE=game PULSE_SINK=game systemd-inhibit obs-gamecapture mangohud ${gameScripts}/bin/run.sh "$@"
+      PIPEWIRE_NODE=game PULSE_SINK=game systemd-inhibit ${vk-capture}/bin/obs-gamecapture mangohud ${gameScripts}/bin/run.sh "$@"
     '');
   withSwayFloating = (pkgs.writeShellScriptBin "withSwayFloating"
     ''

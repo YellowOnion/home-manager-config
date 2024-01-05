@@ -40,7 +40,7 @@ in
       exec ${setDefaultMonitor}/bin/setDefaultMonitor
 
       exec swayidle -w \
-          timeout 605 'swaylock -f -c 000000' \
+          timeout 630 'swaylock -f -c 000000' \
           timeout 600 'swaymsg "output * dpms off"' \
           resume ${swayResume}/bin/swayResume \
           before-sleep 'swaylock -f -c 000000'

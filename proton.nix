@@ -1,6 +1,6 @@
 rec {
-  version = "GE-Proton8-16";
+  version = "GE-Proton8-25";
   name = version;
   url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${version}/${version}.tar.gz";
-  sha256 = "0r11sf7pljw5rqlgbnkl6lkw2cpqyvd16vjp8f64hqjx4ma3947g";
+  sha256 = "1x9ra3115i2hv95fvnwqahd01wgfyc4id7z1yhrmpnk5m1ksb012";
 }

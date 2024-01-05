@@ -45,6 +45,8 @@ in
     in
     [
       element-desktop
+      whatsapp-for-linux
+      glxinfo
       hexchat
       nil
       steamcmd
