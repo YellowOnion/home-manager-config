@@ -18,7 +18,7 @@ in
   programs.doom-emacs = {
     enable = true;
     doomPrivateDir = ./doom.d;
-    extraPackages = [pkgs.nil];
+    extraPackages = [ pkgs.nil ];
     emacsPackage   = pkgs.emacs29-pgtk;
   };
   imports = [
@@ -44,6 +44,7 @@ in
         });
     in
     [
+      anki-bin
       element-desktop
       whatsapp-for-linux
       glxinfo
@@ -91,6 +92,11 @@ in
     name = "Bibata-Original-Classic";
   };
 
+  home.file.".XCompose".text = ''
+    include "${./dotXCompose}"
+    include "${./emoji.compose}"
+    include "${./maths.compose}"
+  '';
   programs.git = {
     enable = true;
     userName = "Daniel Hill";

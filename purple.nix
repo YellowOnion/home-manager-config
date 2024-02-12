@@ -10,7 +10,7 @@ let
   "swayResume"
       ''
         swaymsg 'output * dpms on'
-        sleep 1
+        while [[ $(${pkgs.xorg.xrandr} --listactivemonitors | head -1 | awk '{ print $2;}') != 2 ]]; do sleep 1; done
         swaymsg 'output $lg mode 2560x1440@180hz'
         ${setDefaultMonitor}/bin/setDefaultMonitor
       '');
@@ -28,6 +28,7 @@ in
     (pkgs.writeShellScriptBin "run.sh"
       ''
       ${setDefaultMonitor}/bin/setDefaultMonitor
+      echo "egs ran!"
       exec "$@"
       ''
     )

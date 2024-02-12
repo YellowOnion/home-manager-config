@@ -15,12 +15,12 @@ let
 
   runVKGame = (pkgs.writeShellScriptBin "runVKGame"
     ''
-      PIPEWIRE_NODE=game PULSE_SINK=game OBS_VKCAPTURE=1 MANGOHUD=1 systemd-inhibit ${gameScripts}/bin/run.sh "$@"
+      PIPEWIRE_NODE=input.game PULSE_SINK=input.game OBS_VKCAPTURE=1 MANGOHUD=1 systemd-inhibit ${gameScripts}/bin/run.sh "$@"
     '');
 
   runOGLGame = (pkgs.writeShellScriptBin "runOGLGame"
     ''
-      PIPEWIRE_NODE=game PULSE_SINK=game systemd-inhibit ${vk-capture}/bin/obs-gamecapture mangohud ${gameScripts}/bin/run.sh "$@"
+      PIPEWIRE_NODE=input.game PULSE_SINK=input.game systemd-inhibit ${vk-capture}/bin/obs-gamecapture mangohud ${gameScripts}/bin/run.sh "$@"
     '');
   withSwayFloating = (pkgs.writeShellScriptBin "withSwayFloating"
     ''
