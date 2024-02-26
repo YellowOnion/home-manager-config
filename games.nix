@@ -11,16 +11,23 @@ let
         }
         '');
 
+  gameEnv = ''
+    export MANGOHUD_CONFIG=horizontal,gpu_temp,fps_limit=180+120+90+0
+    export PIPEWIRE_NODE=input.game
+    export PULSE_SINK=input.game
+  '';
   gameScripts = withExtraGameScripts cfg.extraGameScripts;
 
   runVKGame = (pkgs.writeShellScriptBin "runVKGame"
     ''
-      PIPEWIRE_NODE=input.game PULSE_SINK=input.game OBS_VKCAPTURE=1 MANGOHUD=1 systemd-inhibit ${gameScripts}/bin/run.sh "$@"
+    ${gameEnv}
+    OBS_VKCAPTURE=1 MANGOHUD=1 systemd-inhibit ${gameScripts}/bin/run.sh "$@"
     '');
 
   runOGLGame = (pkgs.writeShellScriptBin "runOGLGame"
     ''
-      PIPEWIRE_NODE=input.game PULSE_SINK=input.game systemd-inhibit ${vk-capture}/bin/obs-gamecapture mangohud ${gameScripts}/bin/run.sh "$@"
+    ${gameEnv}
+    systemd-inhibit ${vk-capture}/bin/obs-gamecapture mangohud ${gameScripts}/bin/run.sh "$@"
     '');
   withSwayFloating = (pkgs.writeShellScriptBin "withSwayFloating"
     ''
@@ -46,6 +53,7 @@ in
   config = lib.mkMerge [
     (
       {
+        home.stateVersion = "24.05";
         home.packages = [
           pkgs.jq
           runVKGame

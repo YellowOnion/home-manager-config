@@ -10,17 +10,21 @@ in
 {
   manual.manpages.enable = false;
   # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
+  # programs.home-manager.enable = true;
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
   };
-  programs.doom-emacs = {
-    enable = true;
-    doomPrivateDir = ./doom.d;
-    extraPackages = [ pkgs.nil ];
-    emacsPackage   = pkgs.emacs29-pgtk;
-  };
+  programs.emacs.enable = true;
+  #programs.doom-emacs = {
+  #  enable = true;
+  #  doomPrivateDir = ./doom.d;
+  #  extraPackages = [ pkgs.nil ];
+  #  emacsPackage   = pkgs.emacs29-pgtk;
+  #};
+
+  home.file.".doom.d".source = ./doom.d;
+
   imports = [
     ./games.nix
   ];
@@ -150,5 +154,5 @@ in
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "21.05";
+  home.stateVersion = "24.05";
 }

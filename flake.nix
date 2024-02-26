@@ -5,17 +5,17 @@
     # keep synced with NixOS commit
     nixpkgs.url = "nixpkgs";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
-     nix-straight = {
-      url = "github:codingkoi/nix-straight.el?ref=codingkoi/apply-librephoenixs-fix";
-      flake = false;
-    };
-    nix-doom-emacs = {
-       url = "github:nix-community/nix-doom-emacs";
-       inputs.nix-straight.follows = "nix-straight";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+     #nix-straight = {
+     # url = "github:codingkoi/nix-straight.el?ref=codingkoi/apply-librephoenixs-fix";
+     # flake = false;
+    # };
+    #nix-doom-emacs = {
+    #   url = "github:nix-community/nix-doom-emacs";
+    #   inputs.nix-straight.follows = "nix-straight";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    #};
     home-manager = {
-      url = "github:nix-community/home-manager/release-unstable";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     openttd = {
@@ -24,7 +24,7 @@
     };
   };
 
-  outputs = { nixpkgs, emacs-overlay, nix-doom-emacs, home-manager, openttd, ... }:
+  outputs = { nixpkgs, emacs-overlay, home-manager, openttd, ... }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system;
@@ -33,9 +33,9 @@
                             };
       mkHomeConf = file: home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = {openttd = import openttd {pkgs = pkgs;};};
+        extraSpecialArgs = {openttd = import openttd { pkgs = pkgs;};};
 
-        modules = [ nix-doom-emacs.hmModule file ];
+        modules = [ file ];
       };
 
     in {
