@@ -3,7 +3,7 @@
 
   inputs = {
     # keep synced with NixOS commit
-    nixpkgs.url = "nixpkgs";
+    nixpkgs.url = "nixpkgs/bd645e8668ec6612439a9ee7e71f7eac4099d4f";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
      #nix-straight = {
      # url = "github:codingkoi/nix-straight.el?ref=codingkoi/apply-librephoenixs-fix";

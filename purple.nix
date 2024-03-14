@@ -10,7 +10,11 @@ let
   "swayResume"
       ''
         swaymsg 'output * dpms on'
-        while [[ $(${pkgs.xorg.xrandr} --listactivemonitors | head -1 | awk '{ print $2;}') != 2 ]]; do sleep 1; done
+        I=0
+        while [[ $(${pkgs.xorg.xrandr}/bin/xrandr --listactivemonitors | head -1 | awk '{ print $2;}') != 2 || $I == 30 ]]; do
+          sleep 1
+          I=$(($I+1))
+        done
         swaymsg 'output $lg mode 2560x1440@180hz'
         ${setDefaultMonitor}/bin/setDefaultMonitor
       '');
@@ -40,7 +44,7 @@ in
     ''
       exec ${setDefaultMonitor}/bin/setDefaultMonitor
 
-      exec swayidle -w \
+      exec_always swayidle -w \
           timeout 630 'swaylock -f -c 000000' \
           timeout 600 'swaymsg "output * dpms off"' \
           resume ${swayResume}/bin/swayResume \

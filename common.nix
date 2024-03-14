@@ -48,6 +48,7 @@ in
         });
     in
     [
+      wlsunset
       anki-bin
       element-desktop
       whatsapp-for-linux
