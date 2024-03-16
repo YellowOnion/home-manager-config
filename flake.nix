@@ -40,6 +40,6 @@
 
     in {
       homeConfigurations."daniel@Purple-Sunrise" = mkHomeConf ./purple.nix;
-      homeConfigurations."daniel@Kawasaki-Lemon2" = mkHomeConf ./laptop.nix;
+      homeConfigurations."daniel@Kawasaki-Lemon" = mkHomeConf ./laptop.nix;
     };
 }
