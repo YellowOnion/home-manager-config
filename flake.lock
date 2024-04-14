@@ -110,16 +110,16 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1707546158,
-        "narHash": "sha256-nYYJTpzfPMDxI8mzhQsYjIUX+grorqjKEU9Np6Xwy/0=",
+        "lastModified": 1712439257,
+        "narHash": "sha256-aSpiNepFOMk9932HOax0XwNxbA38GOUVOiXfUVPOrck=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d934204a0f8d9198e1e4515dd6fec76a139c87f0",
+        "rev": "ff0dbd94265ac470dda06a657d5fe49de93b4599",
         "type": "github"
       },
       "original": {
         "id": "nixpkgs",
-        "rev": "d934204a0f8d9198e1e4515dd6fec76a139c87f0",
+        "rev": "ff0dbd94265ac470dda06a657d5fe49de93b4599",
         "type": "indirect"
       }
     },
@@ -131,11 +131,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1691461974,
-        "narHash": "sha256-B1mjQV0O+ZoituIgB0mShk0wUYvhCj/sRDAD/ugyfTM=",
+        "lastModified": 1712840751,
+        "narHash": "sha256-JQjK+q3whrMAncBu3+VQZQifcNbgKahZ59+5scHXiHI=",
         "owner": "YellowOnion",
         "repo": "nix-openttd-jgrpp",
-        "rev": "b038074b958f699cb6cd1cd27436c931161de904",
+        "rev": "e9891165f3b4d61f95adf6001bc72247991bd5fd",
         "type": "github"
       },
       "original": {

@@ -36,6 +36,7 @@ in
     enabled = "fcitx5";
     fcitx5.addons = [ pkgs.fcitx5-mozc ];
   };
+  fonts.fontconfig.enable = true;
   home.packages = with pkgs;
     let
       extraGameScripts = "${config.home.profileDirectory}/bin/extraGameScripts.sh";
@@ -48,6 +49,7 @@ in
         });
     in
     [
+      (pkgs.google-fonts.override { fonts = [ "Kode Mono" "EB Garamond" ]; })
       wlsunset
       anki-bin
       element-desktop

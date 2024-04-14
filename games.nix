@@ -12,7 +12,7 @@ let
         '');
 
   gameEnv = ''
-    export MANGOHUD_CONFIG=horizontal,gpu_temp,fps_limit=180+120+90+0
+    export MANGOHUD_CONFIG=gpu_temp,fps_limit=180+120+90+0
     export PIPEWIRE_NODE=input.game
     export PULSE_SINK=input.game
   '';
